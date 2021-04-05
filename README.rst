@@ -13,6 +13,9 @@ XKCD SimpleBot plugin
 .. image:: https://img.shields.io/pypi/l/simplebot_xkcd.svg
    :target: https://pypi.org/project/simplebot_xkcd
 
+.. image:: https://github.com/simplebot-org/simplebot_xkcd/actions/workflows/python-ci.yml/badge.svg
+   :target: https://github.com/simplebot-org/simplebot_xkcd/actions/workflows/python-ci.yml
+
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
 
