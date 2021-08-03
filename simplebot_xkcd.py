@@ -43,7 +43,7 @@ def _get_reply(comic: xkcd.Comic) -> dict:
         text=f"#{comic.number} - {comic.title}",
         html=comic.altText,
         filename=comic.imageName,
-        bytefile=io.BytesIO(urlopen(comic.imageLink).read()),
+        bytefile=io.BytesIO(urlopen(comic.imageLink).read()),  # noqa
     )
 
 
