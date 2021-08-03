@@ -5,6 +5,7 @@ Changelog
 -------------
 
 - use simpler commands and allow to set command prefix using "command_prefix" setting in the plugin scope.
+- alt-text is now sent in the HTML part of the message.
 
 1.0.0
 -----
