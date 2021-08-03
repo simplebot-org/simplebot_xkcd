@@ -1,11 +1,18 @@
+"""Plugin's hooks and commands definition."""
+
 import io
 from urllib.request import urlopen
 
 import simplebot
 import xkcd
+from pkg_resources import DistributionNotFound, get_distribution
 from simplebot.bot import DeltaBot, Replies
 
-__version__ = "1.0.0"
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    __version__ = "0.0.0.dev0-unknown"
 
 
 @simplebot.hookimpl
@@ -42,6 +49,8 @@ def _get_prefix(bot: DeltaBot) -> str:
 
 
 class TestPlugin:
+    """Offline tests"""
+
     def test_xkcd(self, mocker):
         msg = mocker.get_one_reply("/get 1")
         assert msg.is_image()
