@@ -39,9 +39,12 @@ def xkcd_latest(replies: Replies) -> None:
 
 
 def _get_reply(comic: xkcd.Comic) -> dict:
-    image = urlopen(comic.imageLink).read()
-    text = "#{} - {}\n\n{}".format(comic.number, comic.title, comic.altText)
-    return dict(text=text, filename=comic.imageName, bytefile=io.BytesIO(image))
+    return dict(
+        text=f"#{comic.number} - {comic.title}",
+        html=comic.altText,
+        filename=comic.imageName,
+        bytefile=io.BytesIO(urlopen(comic.imageLink).read()),
+    )
 
 
 def _get_prefix(bot: DeltaBot) -> str:
