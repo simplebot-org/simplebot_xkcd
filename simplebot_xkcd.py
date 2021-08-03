@@ -3,14 +3,22 @@ from urllib.request import urlopen
 
 import simplebot
 import xkcd
-from simplebot.bot import Replies
+from simplebot.bot import DeltaBot, Replies
 
 __version__ = "1.0.0"
 
 
-@simplebot.command(name="/xkcd")
-def cmd_xkcd(payload: str, replies: Replies) -> None:
-    """Show the comic with the given number or a ramdom comic if no number is provided."""
+@simplebot.hookimpl
+def deltabot_init(bot: DeltaBot) -> None:
+    prefix = _get_prefix(bot)
+
+    bot.commands.register(func=xkcd_get, name=f"/{prefix}get")
+
+    bot.commands.register(func=xkcd_latest, name=f"/{prefix}latest")
+
+
+def xkcd_get(payload: str, replies: Replies) -> None:
+    """Get the comic with the given number or a ramdom comic if no number is provided."""
     if payload:
         comic = xkcd.getComic(int(payload))
     else:
@@ -18,8 +26,7 @@ def cmd_xkcd(payload: str, replies: Replies) -> None:
     replies.add(**_get_reply(comic))
 
 
-@simplebot.command
-def xkcdlatest(replies: Replies) -> None:
+def xkcd_latest(replies: Replies) -> None:
     """Get the latest comic released in xkcd.com."""
     replies.add(**_get_reply(xkcd.getLatestComic()))
 
@@ -30,17 +37,18 @@ def _get_reply(comic: xkcd.Comic) -> dict:
     return dict(text=text, filename=comic.imageName, bytefile=io.BytesIO(image))
 
 
+def _get_prefix(bot: DeltaBot) -> str:
+    return bot.get("command_prefix", scope=__name__) or ""
+
+
 class TestPlugin:
     def test_xkcd(self, mocker):
-        msg = mocker.get_one_reply("/xkcd 1")
-        assert msg.filename
-        # assert msg.is_image()
+        msg = mocker.get_one_reply("/get 1")
+        assert msg.is_image()
 
-        msg = mocker.get_one_reply("/xkcd")
-        assert msg.filename
-        # assert msg.is_image()
+        msg = mocker.get_one_reply("/get")
+        assert msg.is_image()
 
     def test_xkcdlatest(self, mocker):
-        msg = mocker.get_one_reply("/xkcdlatest")
-        assert msg.filename
-        # assert msg.is_image()
+        msg = mocker.get_one_reply("/latest")
+        assert msg.is_image()
