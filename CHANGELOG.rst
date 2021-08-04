@@ -6,6 +6,7 @@ Changelog
 
 - use simpler commands and allow to set command prefix using "command_prefix" setting in the plugin scope.
 - alt-text is now sent in the HTML part of the message.
+- reply with error message if user sends invalid comic number.
 
 1.0.0
 -----

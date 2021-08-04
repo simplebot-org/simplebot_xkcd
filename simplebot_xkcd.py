@@ -5,6 +5,7 @@ from urllib.request import urlopen
 
 import simplebot
 import xkcd
+from deltachat import Message
 from pkg_resources import DistributionNotFound, get_distribution
 from simplebot.bot import DeltaBot, Replies
 
@@ -24,13 +25,18 @@ def deltabot_init(bot: DeltaBot) -> None:
     bot.commands.register(func=xkcd_latest, name=f"/{prefix}latest")
 
 
-def xkcd_get(payload: str, replies: Replies) -> None:
+def xkcd_get(payload: str, message: Message, replies: Replies) -> None:
     """Get the comic with the given number or a ramdom comic if no number is provided."""
-    if payload:
+    if not payload:
+        comic = xkcd.getRandomComic()
+    elif payload.isdigit():
         comic = xkcd.getComic(int(payload))
     else:
-        comic = xkcd.getRandomComic()
-    replies.add(**_get_reply(comic))
+        comic = None
+    if comic is None or comic.number == -1:
+        replies.add(text="❌ Invalid comic number", quote=message)
+    else:
+        replies.add(**_get_reply(comic))
 
 
 def xkcd_latest(replies: Replies) -> None:
