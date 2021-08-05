@@ -58,7 +58,7 @@ def _get_prefix(bot: DeltaBot) -> str:
 
 
 class TestPlugin:
-    """Offline tests"""
+    """Online tests"""
 
     def test_xkcd(self, mocker):
         msg = mocker.get_one_reply("/get 1")
